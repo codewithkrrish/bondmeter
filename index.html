@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BondMeter — Love &amp; Friendship Calculator</title>
+  <meta name="description" content="BondMeter measures the fun bond between two names — love, friendship or crush. A deterministic score, an animated reveal, and a shareable result card. Free, in your browser, nothing uploaded.">
+  <link rel="canonical" href="https://bondmeter.vercel.app/">
+  <meta name="theme-color" content="#0B0B0F">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BondMeter — Love &amp; Friendship Calculator">
+  <meta property="og:description" content="Two names, one bond score. Love, friendship or crush — find out where you two stand. Just for fun, free in your browser.">
+  <meta property="og:url" content="https://bondmeter.vercel.app/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BondMeter — Love &amp; Friendship Calculator">
+  <meta name="twitter:description" content="Two names, one bond score. Love, friendship or crush — find out where you two stand. Just for fun, free in your browser.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1>BondMeter</h1>
+      <p class="tagline">Two names, one bond score. Love, friendship or crush — find out where you two stand.</p>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <section class="panel calc-panel" aria-label="Calculate a bond score">
+      <h2>Check your bond</h2>
+
+      <div class="mode-row" id="mode-row" role="group" aria-label="Bond mode">
+        <button type="button" class="btn mode-btn active" data-mode="love">Love</button>
+        <button type="button" class="btn mode-btn" data-mode="friendship">Friendship</button>
+        <button type="button" class="btn mode-btn" data-mode="crush">Crush</button>
+      </div>
+      <p class="mode-tagline" id="mode-tagline">See how your hearts line up.</p>
+
+      <div class="names-row">
+        <div class="field">
+          <label for="name-a" id="label-a">Your name</label>
+          <input type="text" id="name-a" placeholder="e.g. Aarav" maxlength="40" autocomplete="off">
+        </div>
+        <button type="button" class="btn btn-icon swap-btn" id="swap-btn" title="Swap names" aria-label="Swap names">&#8646;</button>
+        <div class="field">
+          <label for="name-b" id="label-b">Their name</label>
+          <input type="text" id="name-b" placeholder="e.g. Meera" maxlength="40" autocomplete="off">
+        </div>
+      </div>
+
+      <p class="error-message" id="error-message" role="alert" hidden></p>
+
+      <div class="calc-actions">
+        <button type="button" class="btn btn-primary btn-calc" id="calc-btn">Check your bond</button>
+        <button type="button" class="btn" id="random-btn">Try a random pair</button>
+      </div>
+      <p class="hint">Press Enter in either name field to calculate. The same pair always gives the same score — in either order.</p>
+    </section>
+
+    <section class="panel result-panel" aria-label="Your bond result" id="result-panel">
+      <div class="result-empty" id="result-empty">
+        <svg class="heart-svg" viewBox="0 0 100 92" aria-hidden="true">
+          <path d="M50 88 C20 66 4 48 4 30 C4 14 16 4 28 4 C38 4 46 10 50 18 C54 10 62 4 72 4 C84 4 96 14 96 30 C96 48 80 66 50 88 Z" fill="none" stroke="#E5484D" stroke-width="4"/>
+        </svg>
+        <p class="empty-title">Your bond score will appear here</p>
+        <p>Type two names above and press "Check your bond".</p>
+      </div>
+
+      <div class="result-body" id="result-body" hidden>
+        <p class="result-names" id="result-names"></p>
+        <p class="result-mode" id="result-mode"></p>
+
+        <div class="gauge" aria-label="Bond score gauge">
+          <svg class="gauge-svg" viewBox="0 0 220 220" aria-hidden="true">
+            <circle class="gauge-track" cx="110" cy="110" r="96"></circle>
+            <circle class="gauge-fill" id="gauge-fill" cx="110" cy="110" r="96"></circle>
+          </svg>
+          <div class="gauge-centre">
+            <span class="gauge-number" id="gauge-number">0%</span>
+            <span class="gauge-label">bond score</span>
+          </div>
+        </div>
+
+        <p class="verdict-title" id="verdict-title"></p>
+        <p class="verdict-message" id="verdict-message"></p>
+        <p class="verdict-oneliner" id="verdict-oneliner"></p>
+
+        <div class="breakdown" id="breakdown"></div>
+
+        <div class="card-actions">
+          <button type="button" class="btn btn-primary" id="download-card-btn">Download result card (PNG)</button>
+          <button type="button" class="btn" id="copy-result-btn">Copy result text</button>
+        </div>
+        <p class="status-message" id="card-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="panel history-panel" aria-label="Recent pairs" id="history-section" hidden>
+      <div class="history-head">
+        <h2>Recent pairs</h2>
+        <button type="button" class="btn btn-small btn-ghost" id="clear-history-btn">Clear history</button>
+      </div>
+      <ul class="history-list" id="history-list"></ul>
+      <p class="hint">Tap a pair to run it again. Your last 8 pairs are kept in this browser only.</p>
+    </section>
+
+    <section class="panel about" aria-label="About this tool">
+      <h2>How it works</h2>
+      <p>BondMeter turns two names and a mode into a score with a stable hash — the same pair in the same mode always gets the same percentage, whichever order you type the names in. The breakdown bars (chemistry, banter, trust, adventure) come from the same hash, so they are stable too.</p>
+      <p>This is just for fun. It is not real compatibility science, it cannot predict a relationship, and no score here means anything about two real people. Use it for laughs, ice-breakers, and friendly arguments — not for decisions that matter.</p>
+      <p>Everything runs in your browser. Your names and your recent pairs are stored in this browser's local storage and never leave your device. Clearing your browser data clears them too.</p>
+      <p>Keyboard: press Enter in either name field to calculate.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Built by <a href="https://github.com/codewithkrrish/bondmeter">krrish</a> · <a href="https://www.instagram.com/krrishx.ai">Instagram</a></p>
+      <p class="privacy">Everything runs in your browser — your names never leave your device.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
