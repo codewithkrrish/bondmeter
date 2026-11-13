@@ -326,7 +326,7 @@ export function drawResultCard(ctx, result) {
   wrapText(ctx, data.tierMessage, W / 2, 840, 880, 48);
 
   // Breakdown bars.
-  let y = 1010;
+  let y = 960;
   ctx.textAlign = "left";
   for (const item of data.breakdown) {
     ctx.fillStyle = "#9A9AA5";
@@ -340,20 +340,20 @@ export function drawResultCard(ctx, result) {
     ctx.fillRect(120, y + 14, 840, 14);
     ctx.fillStyle = ACCENT;
     ctx.fillRect(120, y + 14, Math.round(840 * (item.value / 100)), 14);
-    y += 76;
+    y += 66;
   }
 
-  // Footer.
-  ctx.fillStyle = "#9A9AA5";
+  // Footer — stacked with clear gaps so nothing overlaps the bars.
+  ctx.fillStyle = "#D8D8DE";
   ctx.font = "400 28px Inter, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(data.oneliner, W / 2, y + 10);
+  ctx.fillText(data.oneliner, W / 2, 1246);
   ctx.fillStyle = "#F5F5F7";
   ctx.font = "700 34px Inter, sans-serif";
-  ctx.fillText(`bondmeter.vercel.app`, W / 2, H - 96);
+  ctx.fillText(`bondmeter.vercel.app`, W / 2, 1290);
   ctx.fillStyle = "#9A9AA5";
   ctx.font = "400 26px Inter, sans-serif";
-  ctx.fillText(data.disclaimer, W / 2, H - 52);
+  ctx.fillText(data.disclaimer, W / 2, 1322);
   return true;
 }
 
